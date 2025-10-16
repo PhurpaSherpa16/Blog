@@ -1,26 +1,135 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.625rem;
+  --background: #f7f7f7;
+  --textColor: rgba(0, 0, 0, 0.607);
+
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --background: #141419;
+  --textColor: rgba(255, 255, 255, 0.607);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@font-face {
+  font-family: 'Bosate';
+  src: url('/Basote.ttf');
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.menuLogo {
+  font-family: 'Bosate';
+  font-size: 2vw;
+  font-weight: bold;
+}
+
+.cardImage img{
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover .cardImage img{
+  scale: 1.1;
+}
+
+.card:hover h1{
+  transition: all 0.3s ease-in-out;
+}
+
+ h1{
+    font-weight: bold;
+    font-size: 3rem;
+    line-height: 2;
+    color: var(--primary-text-color);
+  }
+
+  h2{
+    font-weight: bold;
+    font-size: 1.5rem;
+    line-height: 1.75;
+    color: var(--primary-text-color);
+    padding-top: 2rem;
+  }
+
+  pre{
+    border-radius: 8;
+    padding: 12px;
+    width: 100%;
+    margin-block: 12px;
+  }
+
+  code[data-line-numbers] {
+  counter-reset: line;
+}
+span[data-highlighted-line] {
+  background-color: rgba(128, 128, 128, 0.19);
+}
+mark[data-highlighted-chars] {
+  background-color: rgba(128, 128, 128, 0.542);
+}
+
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+
+  /* Other styling */
+  display: inline-block;
+  width: 0.75rem;
+  margin-right: 2rem;
+  text-align: right;
+  color: gray;
+}
+
+code[data-line-numbers-max-digits="2"] > [data-line]::before {
+  width: 1.25rem;
+}
+
+code[data-line-numbers-max-digits="3"] > [data-line]::before {
+  width: 1.75rem;
+}
+
+code[data-line-numbers-max-digits="4"] > [data-line]::before {
+  width: 2.25rem;
+}
+
+@layer components{
+  .flex-center{
+        @apply
+        flex items-center justify-center
+  }
+  .card span, .card p{
+    @apply
+    text-[var(--textColor)]
+  }
+}
+
+code[data-line-numbers] {
+  counter-reset: line;
+}
+
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+
+  /* Other styling */
+  display: inline-block;
+  width: 0.75rem;
+  margin-right: 2rem;
+  text-align: right;
+  color: gray;
+}
+
+code[data-line-numbers-max-digits="2"] > [data-line]::before {
+  width: 1.25rem;
+}
+
+code[data-line-numbers-max-digits="3"] > [data-line]::before {
+  width: 1.75rem;
+}
+
+code[data-line-numbers-max-digits="4"] > [data-line]::before {
+  width: 2.25rem;
 }
