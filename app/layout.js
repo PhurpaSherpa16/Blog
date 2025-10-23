@@ -1,7 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import BlogNavbar from "./components/blogNavbar";
 import ThemeProvider from "./components/theme/theme-provider";
+import { AuthProvider } from "./components/auth/AuthContext";
+import Navbarwrapper from "./components/navbar-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,20 +22,23 @@ export const metadata = {
   }
 };
 
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange>
-          <BlogNavbar />
-          <div className="container mx-auto py-16">
-            {children}
-          </div>
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange>
+              <Navbarwrapper/>
+            <div>
+              {children}
+            </div>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )

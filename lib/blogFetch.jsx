@@ -1,5 +1,4 @@
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import React from 'react'
 import { db } from './firebase';
 
 export default async function BlogFetch() {
@@ -19,3 +18,4 @@ export const getBlogById = async (id) => {
         return null;
     }
 }
+

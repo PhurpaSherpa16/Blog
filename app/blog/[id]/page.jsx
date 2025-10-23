@@ -1,4 +1,3 @@
-import { getBlogById } from '@/lib/blogFetch';
 import React from 'react'
 import fs from 'fs'
 import matter from 'gray-matter'
@@ -10,17 +9,19 @@ import remarkRehype from 'remark-rehype'
 import {unified} from 'unified'
 import rehypePrettyCode from "rehype-pretty-code";
 import { transformerCopyButton } from '@rehype-pretty/transformers'
-
-
+import { getBlogById } from '@/lib/blogFetch';
 
 export default async function page({params}) {
+
     const blog = await getBlogById(params.id);
 
-    if(!blog.mdContent){
+    console.log(blog)
+
+    if(!blog.content){
         return <div className='container mx-auto py-8'>Post dont have data</div>
     }
     
-    const {data, content} = matter(blog.mdContent)
+    const {data, content} = matter(blog.content)
     const processor = await unified()
         .use(remarkParse)
         .use(remarkRehype)
@@ -44,7 +45,7 @@ export default async function page({params}) {
         <div className="container mx-auto py-8">
         <h1 className="text-3xl font-bold">{blog.title}</h1>
         <p className="text-gray-500">{blog.date} | {blog.author}</p>
-        <img src={blog.image} alt={blog.title} className="my-4 rounded-lg" />
+        <img src={blog.imageURL} alt={blog.title} className="my-4 rounded-lg w-full object-cover" />
         <div className="prose dark:prose-invert">
             <article dangerouslySetInnerHTML={{ __html: contentHtml }}/>
         </div>

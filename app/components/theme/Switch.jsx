@@ -144,7 +144,7 @@ export default function ThemeSwitch() {
   }, [theme]);
 
   return (
-    <div className='relative scale-50'>
+    <div className='relative scale-50 w-fit'>
       <button className='cursor-pointer' onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
         <div className='h-20 w-20 rounded-full flex items-center justify-center relative'>
           <div className='h-full w-full flex items-center justify-center relative'>

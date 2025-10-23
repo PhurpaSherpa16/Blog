@@ -3,6 +3,8 @@ import React, { useEffect, useRef } from 'react'
 import { CgCalendarDates } from "react-icons/cg";
 import gsap from 'gsap';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import RedableDate from './redableDate';
 
 
 export default function BlogCard({blog}) {
@@ -10,6 +12,7 @@ export default function BlogCard({blog}) {
     const buttonRef = useRef(null);
     const hrRef = useRef(null);
 
+    const location = usePathname()
 
     useEffect(()=>{
         const card = cardRef.current;
@@ -35,6 +38,8 @@ export default function BlogCard({blog}) {
 
     },[])
 
+    const words = blog.content.split(/\s+/)
+    const readTime = words[0] === '' ? 0 : Math.ceil(words.length / 70)
 
     const tech = [
         {name: "react", src: '/react.svg'},
@@ -42,24 +47,35 @@ export default function BlogCard({blog}) {
         {name: "gsap", src: '/gsap.svg'},
     ]
 
+    // const date = RedableDate(blog.createdAt)
+
     return (
-        <div ref={cardRef} className='w-100 overflow-hidden grid card shadow-lg bg-gray-400/5 rounded-lg hover:shadow-2xl transition-shadow duration-300'>
-            <div className='cardImage w-fit overflow-hidden relative'>
-                <img src={blog.image || "https://images.unsplash.com/photo-1526779259212-939e64788e3c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZnJlZSUyMGltYWdlc3xlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000"} 
+        <div ref={cardRef} className='relative w-full overflow-hidden grid card shadow-lg bg-gray-400/5 rounded-lg hover:shadow-2xl transition-shadow duration-300'>
+            <div className='cardImage w-full overflow-hidden relative'>
+                <img src={blog.imageURL} 
                 alt="react image"
-                className='h-50 w-100 object-cover relative'
+                className='h-60 w-full object-cover relative'
                 />
-                <Link href={`/blog/${blog.id}`} ref={buttonRef} className='button cursor-pointer absolute z-10 bottom-5 right-5 text-black bg-white/70 backdrop-blur-lg
-                px-4 py-2 rounded-full font-medium'>
-                    Read More
-                </Link>
+
+                {
+                    location === '/admin' ?
+                    <Link href={`/admin/blog/${blog.id}`} ref={buttonRef} className='button cursor-pointer absolute z-10 bottom-5 right-5 text-black bg-white/70 backdrop-blur-lg
+                    px-4 py-2 rounded-full font-medium'>
+                        View Post
+                    </Link>
+                    :
+                    <Link href={`/blog/${blog.id}`} ref={buttonRef} className='button cursor-pointer absolute z-10 bottom-5 right-5 text-black bg-white/70 backdrop-blur-lg
+                    px-4 py-2 rounded-full font-medium'>
+                        Read More
+                    </Link>
+                }
             </div>
-            <div className='grid gap-2 w-fit px-4 py-4 bg-gray-400/10'>
+            <div className='flex flex-col gap-2 h-50 w-full px-4 py-4 bg-gray-400/10'>
                 <div className='flex-center w-fit gap-2'>
                     <CgCalendarDates className='h-4 w-4'/>
-                    <span>{blog.date || '6 Oct 2024'}</span>
+                    <span><RedableDate date={blog.createdAt} /></span>
                     <span className='bg-black/60 w-1 h-1 rounded-full'></span>
-                    <span>{blog.read_time || '3'} min read</span>
+                    <span>{readTime} min read</span>
                 </div>
                 <div className='flex items-center w-full gap-4 '>
                     <span className='italic font-medium'>{blog.author || 'Phurpa Sherpa'}</span>
@@ -73,11 +89,15 @@ export default function BlogCard({blog}) {
                 </div>
                 <div>
                     <div className='w-fit'>
-                        <Link  href={`/blog/${blog.id}`} className='cursor-pointer font-medium'>{blog.title}</Link>
+                        {
+                            location === '/admin' ?
+                            <Link  href={`/admin/blog/${blog.id}`} className='cursor-pointer font-medium'>{blog.title}</Link>
+                            :
+                            <Link  href={`/blog/${blog.id}`} className='cursor-pointer font-medium'>{blog.title}</Link>
+                        }
                         <div ref={hrRef} className='w-full h-1 border-t-2'/>
                     </div>
-                    <p className='text-justify'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae ipsum ipsa doloribus! Vel enim veniam. 
-                        Lorem ipsum dolor sit amet.</p>
+                    <p className='text-justify'>{blog.description}</p>
                 </div>
             </div>
         </div>
