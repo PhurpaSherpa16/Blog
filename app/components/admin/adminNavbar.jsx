@@ -9,6 +9,7 @@ import { MdPostAdd } from "react-icons/md";
 import { FaUserEdit } from "react-icons/fa";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import UserProfile from '@/app/components/userProfile'
 
 
 export default function AdminNavbar() {
@@ -23,15 +24,7 @@ export default function AdminNavbar() {
       <div className='h-full flex flex-col justify-between pt-16'>
         <div className='grid gap-8'>
           <div className='admin-padding-inLine'>
-            <div className='overflow-hidden bg-[#ff4d00] w-fit rounded-full'>
-              <Image
-              className='object-cover'
-              src={'/avatar_boy.png'}
-              height={150}
-              alt='logo'
-              width={150}
-              />
-            </div>
+            <UserProfile userData={userData}/>
             <div className='grid'>
               <span className='uppercase font-bold text-2xl'>{userData.fullName}</span>
               <div className='text-[var(--textColor)]'>

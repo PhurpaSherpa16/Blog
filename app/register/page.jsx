@@ -22,7 +22,7 @@ export default function page() {
     const [formData, setFormData] = useState({
         fullName: '',
         profession: '',
-        imageUrl: 'default',
+        imageUrl: 'user',
         email: '',
         password: ''
     })

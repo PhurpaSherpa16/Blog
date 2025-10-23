@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc, onSnapshot } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 const AuthContext = createContext();
 
@@ -10,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null)
+  const router = useRouter()
 
  useEffect(() => {
   let unsubscribeSnapshot = () => {}; // default no-op
@@ -42,6 +44,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     await signOut(auth);
+    router.push('/')
   };
 
   return (
