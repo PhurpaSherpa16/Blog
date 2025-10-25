@@ -47,10 +47,10 @@ export default function BlogCard({blog}) {
         {name: "gsap", src: '/gsap.svg'},
     ]
 
-    // const date = RedableDate(blog.createdAt)
-
     return (
-        <div ref={cardRef} className='relative w-full overflow-hidden grid card shadow-lg bg-gray-400/5 rounded-lg hover:shadow-2xl transition-shadow duration-300'>
+        <div ref={cardRef} className='relative w-full overflow-hidden grid card shadow
+        h-110 border-1 borderColor
+        bg-gray-400/5 rounded-lg hover:shadow-lg transition-shadow duration-300'>
             <div className='cardImage w-full overflow-hidden relative'>
                 <img src={blog.imageURL} 
                 alt="react image"
@@ -70,7 +70,7 @@ export default function BlogCard({blog}) {
                     </Link>
                 }
             </div>
-            <div className='flex flex-col gap-2 h-50 w-full px-4 py-4 bg-gray-400/10'>
+            <div className='flex flex-col gap-2 h-full w-full px-4 py-4 bg-gray-400/10'>
                 <div className='flex-center w-fit gap-2'>
                     <CgCalendarDates className='h-4 w-4'/>
                     <span><RedableDate date={blog.createdAt} /></span>
@@ -91,13 +91,17 @@ export default function BlogCard({blog}) {
                     <div className='w-fit'>
                         {
                             location === '/admin' ?
-                            <Link  href={`/admin/blog/${blog.id}`} className='cursor-pointer font-medium'>{blog.title}</Link>
+                            <Link  href={`/admin/blog/${blog.id}`} className='cursor-pointer font-medium'>
+                                {blog.title.split(" ").length <= 5 ? blog.title : blog.title.split(" ").slice(0,6).join(" ") + " ..."}
+                                </Link>
                             :
-                            <Link  href={`/blog/${blog.id}`} className='cursor-pointer font-medium'>{blog.title}</Link>
+                            <Link  href={`/blog/${blog.id}`} className='cursor-pointer font-medium'>
+                                {blog.title.split(" ").length <= 5 ? blog.title : blog.title.split(" ").slice(0,6).join(" ") + " ..."}
+                            </Link>
                         }
                         <div ref={hrRef} className='w-full h-1 border-t-2'/>
                     </div>
-                    <p className='text-justify'>{blog.description}</p>
+                    <p className='text-justify'>{blog.description.split(" ").slice(0,15).join(" ") + " ..."}</p>
                 </div>
             </div>
         </div>

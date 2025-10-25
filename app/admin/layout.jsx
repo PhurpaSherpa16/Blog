@@ -1,4 +1,3 @@
-// app/admin/layout.jsx
 import '@/app/globals.css'
 import { AuthProvider } from '@/app/components/auth/AuthContext'
 import ThemeProvider from '@/app/components/theme/theme-provider'
@@ -15,23 +14,23 @@ export default function AdminLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body>
         <AuthProvider>
-          <AlertContext>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="light"
-              enableSystem
-              disableTransitionOnChange>
-              <div className='flex relative'>
-                <AlertMessageGlobal/>
-                <div className='w-2/10 h-full sticky top-0'>
-                  <AdminNavbar/>
+            <AlertContext>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange>
+                <div className='grid md:flex relative'>
+                  <AlertMessageGlobal/>
+                  <div className='lg:w-2/10 h-full md:h-screen sticky top-0 z-100'>
+                    <AdminNavbar/>
+                  </div>
+                  <div className='w-full md:w-8/10 relative'>
+                    {children}
+                  </div>
                 </div>
-                <div className='w-8/10 relative'>
-                  {children}
-                </div>
-              </div>
-            </ThemeProvider>
-          </AlertContext>
+              </ThemeProvider>
+            </AlertContext>
         </AuthProvider>
       </body>
     </html>

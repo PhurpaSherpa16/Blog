@@ -2,7 +2,6 @@
 import React from 'react'
 import ThemeSwitch from '../theme/Switch'
 import { useAuth } from '../auth/AuthContext';
-import Image from 'next/image';
 import { BiLogOut } from "react-icons/bi";
 import { GoHomeFill } from "react-icons/go";
 import { MdPostAdd } from "react-icons/md";
@@ -10,17 +9,32 @@ import { FaUserEdit } from "react-icons/fa";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import UserProfile from '@/app/components/userProfile'
-
+import MobileAdminNavbar from './MobileAdminNavbar';
 
 export default function AdminNavbar() {
-  const { loading, logout, userData} = useAuth();
+  const {logout, userData} = useAuth();
   const pathname = usePathname()
 
-  if (loading) return <p>Loading...</p>;
-  if (!userData) return
+  if (pathname === '/admin'){
+    if (!userData) return
+  }
+  if (pathname === '/admin/profile-edit'){
+    if (!userData) return
+  }
+  
+  else{
+    if (!userData)
+        return (
+      <div className='h-screen w-full flex-center'>
+            <span>Loading...</span>
+          </div>
+    );
+  }
+
 
   return (
-    <div className='h-screen overflow-hidden adminNavbar'>
+    <>
+    <div className='hidden md:block h-screen overflow-hidden adminNavbar'>
       <div className='h-full flex flex-col justify-between pt-16'>
         <div className='grid gap-8'>
           <div className='admin-padding-inLine'>
@@ -71,5 +85,9 @@ export default function AdminNavbar() {
         </div>
       </div>
     </div>
+
+    {/* Mobile NavBar */}
+    <MobileAdminNavbar logout={logout} userData={userData}/>
+    </>
   )
 }

@@ -10,7 +10,7 @@ export default function page() {
     }
 
   return (
-    <div className='cardDiv gap-8'>
+    <div className='cardDiv gap-8 w-full'>
       {blogs.map((item, index)=>(
         <div key={index}>
           <BlogCard blog={item}/>

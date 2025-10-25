@@ -1,13 +1,16 @@
-import PostCards from '@/app/components/admin/PostCards'
+import RegisterPosts from '@/app/components/admin/RegisterPosts'
 import React from 'react'
 
 export default function page() {
   return (
-    <div className='py-16 min-h-screen flex items-center justify-center w-full'>
-      <div className='admin-padding-inLine w-full'>
-          <h1 className='font-serif'>Add Post</h1>
-          <PostCards/>
-      </div>
+    <div>
+        <div className='grid gap-8 px-4 md:py-16'>
+          <div>
+            <span className='text-[var(--textColor)]'>Start Writing Your Post</span>
+            <h1>Share your thoughts — fill in the details and hit publish when ready</h1>
+          </div>
+          <RegisterPosts/>
+        </div>
     </div>
   )
 }

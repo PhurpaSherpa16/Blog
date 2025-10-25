@@ -12,6 +12,7 @@
   --themeHover : oklch(66.127% 0.22277 24.992);
   --inputBorder : #c4c4c4;
   --border : rgba(0, 0, 0, 0.166);
+  --whiteBlack : white;
 }
 
 .dark {
@@ -25,6 +26,7 @@
   --themeHover : oklch(0% 0 0 / 0.63);
   --inputBorder : #626262;
   --border : rgba(255, 255, 255, 0.166);
+  --whiteBlack : rgb(0, 0, 0);
 }
 
 @font-face {
@@ -38,8 +40,6 @@ body {
 
 .menuLogo {
   font-family: 'Bosate';
-  font-size: 2vw;
-  font-weight: bold;
 }
 
 .cardDiv{
@@ -59,32 +59,35 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
- h1{
-    font-weight: bold;
-    font-size: 3rem;
-    line-height: 4.8rem;
-    color: var(--primary-text-color);
-  }
+article h1{
+  font-weight: bold;
+  font-size: 3rem;
+  line-height: 4.8rem;
+  color: var(--primary-text-color);
+}
 
-  h2{
-    font-weight: bold;
-    font-size: 1.5rem;
-    line-height: 1.75;
-    color: var(--primary-text-color);
-    padding-top: 2rem;
-  }
 
-  pre{
-    border-radius: 8;
-    padding: 12px;
-    width: 100%;
-    margin-block: 12px;
-  }
 
-  code[data-line-numbers] {
+article h2{
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1.75;
+  color: var(--primary-text-color);
+  padding-top: 2rem;
+}
+
+article pre{
+  border-radius: 8;
+  padding: 12px;
+  width: 100%;
+  margin-block: 12px;
+  overflow-x: scroll;
+}
+
+article code[data-line-numbers] {
   counter-reset: line;
 }
-span[data-highlighted-line] {
+article span[data-highlighted-line] {
   background-color: rgba(128, 128, 128, 0.19);
 }
 mark[data-highlighted-chars] {
@@ -116,9 +119,26 @@ code[data-line-numbers-max-digits="4"] > [data-line]::before {
 }
 
 @layer components{
-  .paddin-inLine{
+  .bodyPostPadding{
     @apply
-    container mx-auto py-16
+    py-4 md:py-16 px-8
+  }
+
+  h1{
+    @apply
+    text-4xl font-bold
+  }
+
+  /* logo title */
+  .menuLogo{
+    @apply
+    text-2xl lg:text-4xl
+  }
+
+  .padding-inLine{
+    @apply
+    container mx-auto py-8
+    px-4 lg:px-0
   }
 
   .admin-padding-inLine{
@@ -155,8 +175,18 @@ code[data-line-numbers-max-digits="4"] > [data-line]::before {
     @apply
     p-4 rounded-lg cursor-pointer
     text-[var(--background)]
+    transition-all duration-300 ease-in-out
+    hover:shadow-lg
   }
 
+  .borderColor{
+    @apply
+    border-[var(--border)]
+  }
+  .background{
+    @apply
+    bg-[var(--menuBackgroundColor)]
+  }
 
 }
 

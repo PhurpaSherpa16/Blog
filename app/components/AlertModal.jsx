@@ -13,12 +13,12 @@ export default function AlertModal({setConfirmModal, saveChanges}) {
                 <span className='text-lg font-bold'>Confirm update?</span>
                 <span className='text-justify text-[var(--textColor)]'>This action will update the stored data immediately. Make sure all fields are correct before proceeding</span>
             </div>
-            <div className='flex gap-2 w-full'>
-                <button className='button bg-gray-500 hover:bg-gray-600 w-full flex items-center gap-2'
+            <div className='grid md:flex md:gap-2 gap-4 w-full'>
+                <button className='flex-center button text-black hover:text-white bg-gray-500 hover:bg-gray-600 w-full flex items-center gap-2'
                 onClick={()=>setConfirmModal(false)}>
                     <RiArrowGoBackFill/>
                     No, go back</button>
-                <button className='button bg-green-500 hover:bg-green-600 w-full flex items-center gap-2'
+                <button className='flex-center button text-white hover:text-white bg-green-500 hover:bg-green-600 w-full flex items-center gap-2'
                 onClick={()=>saveChanges()}>
                     <FaSave/>
                     Save Changes</button>

@@ -1,14 +1,15 @@
 "use client";
 import { db } from '@/lib/firebase';
-import { deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import { deleteDoc, doc,updateDoc } from 'firebase/firestore';
+import React, {useContext, useState } from 'react';
 import { FaEdit } from "react-icons/fa";
 import Lottie from 'lottie-react';
 import animation from '@/public/success.json'
 import { FaQuestionCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from 'next/navigation';
-import { useAuth } from './auth/AuthContext';
+import Loading from './admin/Loading';
+import { AlertContext } from './admin/AlertContext';
 
 
 
@@ -19,8 +20,11 @@ export default function AdminPostEditable({ contentHtml, blog }) {
   const [confirm, setConfirm] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleteProjectName, setDeleteProjectName] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const {setMessage} = useContext(AlertContext)
+  const [disable, setDisable] = useState(true)
+
   const router = useRouter()
-  const {setLoading} = useAuth()
 
    const [post, setPost] = useState({
           title : blog.title,
@@ -28,13 +32,23 @@ export default function AdminPostEditable({ contentHtml, blog }) {
           imageURL : blog.imageURL,
           content : blog.content,
       })
-  
-  console.log(blog.createdAt)
 
   const handleChnage = (e) =>{
       setPost({
         ...post, [e.target.name] : e.target.value
       })
+  }
+
+  const handleNameMatch = (e) =>{
+    const value = e.target.value
+    setDeleteProjectName(value)
+    if(value.trim() === blog.title.trim()){
+      setError('')
+      setDisable(false)
+    }
+    else{
+      setDisable(true)
+    }
   }
 
   const descriptionClick = (e) =>{
@@ -66,19 +80,28 @@ export default function AdminPostEditable({ contentHtml, blog }) {
   }
 
   const deletePost = async() =>{
-      console.log(deleteProjectName, blog.title)
+      setLoading(true)
       if (deleteProjectName === blog.title){
         try{
           const ref = doc(db, 'blogs', blog.id)
           await deleteDoc(ref)
+          setLoading(false)
           router.push('/admin')
+          setMessage('Post Deleted.')
+          setDisable(true)
+          setError('')
         }
         catch(error){
-          console.log('Error')
           setError('Failed to Delete')
+          setDisable(true)
         }
       }
-      return null
+      else{
+        setLoading(false)
+        setDisable(true)
+        setError('Name did not match')
+      }
+      return
   }
 
   const updatedPost = () =>{
@@ -88,12 +111,16 @@ export default function AdminPostEditable({ contentHtml, blog }) {
     setError(null)
   }
   
+  if(loading) return <Loading/>
+
+
   return (
     <div className='relative w-full'>
       {/* When Update Button Click, notification modal */}
       { modal ?
-          <div className='fixed flex-center h-full w-8/10 bg-black/30 z-10 backdrop-blur-lg'>
-              <div className='min-w-85 min-h-30 bg-[var(--background)] p-4 rounded-lg flex flex-col gap-4'>
+          <div className='fixed flex-center bottom-0 h-full w-full md:w-8/10 bg-black/30 z-10 backdrop-blur-lg'>
+              <div className='min-w-85 min-h-30 bg-[var(--background)] p-4 rounded-lg flex flex-col gap-4
+              border-1 borderColor'>
                 {confirm ? 
                 <div className='flex flex-col gap-4'>
                   <div className='w-full flex-center'>
@@ -108,17 +135,17 @@ export default function AdminPostEditable({ contentHtml, blog }) {
                   </div>
                   </div>
                 :
-                <div>
-                  <span className='text-[var(--textColor)]'>Message</span>
+                <div className='grid gap-4'>
+                  <span className='text-[var(--textColor)]'>Confirmation</span>
                   <div className='flex flex-col gap-2'>
                     <div>
                       <span className='font-medium'>Are You Sure, Want to update this post?</span>
                     </div>
                     <div className='flex gap-4'>
                       <button className='saveButton font-bold cursor-pointer bg-green-500 text-white'
-                        onClick={()=>handleConfirmation(true)}>Yes</button>
+                        onClick={()=>handleConfirmation(true)}>Yes, update it</button>
                         <button className='saveButton hover:bg-red-500 cursor-pointer bg-gray-500/60 text-white'
-                        onClick={()=>setModal(false)}>No</button>
+                        onClick={()=>setModal(false)}>Cancel</button>
                     </div>
                 </div>
                 </div>
@@ -127,12 +154,18 @@ export default function AdminPostEditable({ contentHtml, blog }) {
           </div>
           : ''
         }
-      <div className="relative py-8 w-full px-8 grid gap-4">
-      <div className='pb-8'>
+
+      {/* Register post start from here */}
+      <div className="relative py-8 w-full px-4 grid gap-4">
+      <div className='pb-4'>
         <span className='text-[var(--textColor)]'>You’re editing this post</span>
         <h1>Edit Blog Entry</h1>
       </div>
-      <div className='relative grid gap-4 w-1/2 border-1 rounded-lg p-4 border-[var(--inputBorder)]'>
+
+      {/* Form section */}
+
+      {/* Title */}
+      <div className='relative grid gap-4 md:w-1/2 border-1 rounded-lg p-4 borderColor'>
         <div className='relative flex justify-between w-full'>
           <span className='text-[var(--textColor)]'>Title</span>
           <button className='cursor-pointer'
@@ -173,7 +206,9 @@ export default function AdminPostEditable({ contentHtml, blog }) {
           )}
         </div>
       </div>
-      <div className='relative grid gap-4 w-full border-1 rounded-lg p-4 border-gray-300'>
+
+      {/* Description */}
+      <div className='relative grid gap-4 w-full border-1 rounded-lg p-4 borderColor'>
         <div className='relative flex justify-between w-full'>
           <span className='text-[var(--textColor)]'>Description</span>
           <button className='cursor-pointer'
@@ -209,7 +244,9 @@ export default function AdminPostEditable({ contentHtml, blog }) {
         )}
         </div>
       </div>
-      <div className='relative grid gap-8 w-full border-1 rounded-lg p-4 border-gray-300'>
+
+      {/* Image */}
+      <div className='relative grid gap-8 w-full border-1 rounded-lg p-4 borderColor'>
         <div className='relative flex justify-between w-full'>
           <div className='flex gap-4 items-center'>
             <span className='text-[var(--textColor)]'>Image</span>
@@ -249,9 +286,9 @@ export default function AdminPostEditable({ contentHtml, blog }) {
         )}
       </div>
 
-      <div className='relative grid gap-8 w-full border-1 rounded-lg p-4 border-gray-300'>
+      <div className='relative grid gap-8 w-full border-1 rounded-lg p-4 borderColor'>
         <div className='relative flex justify-between w-full'>
-          <span className='text-[var(--textColor)]'>Image</span>
+          <span className='text-[var(--textColor)]'>Content</span>
           <button
               className='cursor-pointer'
               title='Edit title'
@@ -281,7 +318,7 @@ export default function AdminPostEditable({ contentHtml, blog }) {
           </div>
         ) : (
           <>
-            <article dangerouslySetInnerHTML={{ __html: contentHtml }}/>  
+            <article className='overflow-scroll' dangerouslySetInnerHTML={{ __html: contentHtml }}/>  
           </>
         )}
       </div>
@@ -294,9 +331,10 @@ export default function AdminPostEditable({ contentHtml, blog }) {
         </button>
       </div>
       </div>
+
         {confirmDelete && (
-        <div className='h-screen w-8/10 fixed top-0 bg-black/20 backdrop-blur-2xl flex-center'>
-            <div className="w-100 min-h-30 bg-[var(--background)] p-4 rounded-lg flex flex-col gap-2">
+        <div className='h-screen w-full px-4 md:w-8/10 fixed top-0 bg-black/20 backdrop-blur-2xl flex-center'>
+            <div className="w-100 border-1 borderColor min-h-30 bg-[var(--background)] p-4 rounded-lg flex flex-col gap-2">
               <div className='pb-2'>
                 <span className='font-bold text-lg'>Delete this post?</span>
               </div>
@@ -307,14 +345,20 @@ export default function AdminPostEditable({ contentHtml, blog }) {
               <div className='grid gap-2 py-2'>
                 <input className='p-2 border-2 px-4 rounded-lg
             border-[var(--inputBorder)] w-full' type="text" placeholder='Type the post name for confirmation'
-            onChange={(e)=>setDeleteProjectName(e.target.value)}/>
-                <span className='text-sm font-light bg-[var(--textColor)] w-fit text-white py-1 px-4 rounded-sm'>{blog.title}</span>
+            onChange={handleNameMatch}/>
+                <div className='grid gap-1 justify-between'>
+                  <p className='text-[var(--textColor)]'>Post Name: <span className='text-sm font-light bg-[var(--textColor)] w-fit text-white py-1 px-4 rounded-sm'>{blog.title}</span></p>
+                  <span>{error && (
+                    <p className="text-red-500 text-sm mt-1">{error}</p>
+                  )}</span>
+                </div>
               </div>
-              <button className='cursor-pointer hover:bg-red-500 p-2 rounded-lg hover:text-white' onClick={deletePost}>Yes, delete</button>
+              <button type='button' disabled={disable} className='disabled:cursor-not-allowed cursor-pointer disabled:text-black disabled:bg-gray-200 bg-red-400 hover:bg-red-500 p-2 rounded-lg text-white' onClick={deletePost}>Yes, delete</button>
               <button className='cursor-pointer bg-gray-500 p-2 rounded-lg text-white' onClick={() =>setConfirmDelete(false)}>Cancel</button>
             </div>
         </div>
         )}
+
     </div>
   );
 }

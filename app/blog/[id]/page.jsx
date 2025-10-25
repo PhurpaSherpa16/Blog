@@ -10,13 +10,9 @@ import {unified} from 'unified'
 import rehypePrettyCode from "rehype-pretty-code";
 import { transformerCopyButton } from '@rehype-pretty/transformers'
 import { getBlogById } from '@/lib/blogFetch';
-
 export default async function page({params}) {
 
     const blog = await getBlogById(params.id);
-
-    console.log(blog)
-
     if(!blog.content){
         return <div className='container mx-auto py-8'>Post dont have data</div>
     }
@@ -42,10 +38,12 @@ export default async function page({params}) {
         const contentHtml = (await processor.process(content)).toString()
 
     return (
-        <div className="container mx-auto py-8">
+        <div className="padding-inLine py-8">
         <h1 className="text-3xl font-bold">{blog.title}</h1>
         <p className="text-gray-500">{blog.date} | {blog.author}</p>
-        <img src={blog.imageURL} alt={blog.title} className="my-4 rounded-lg w-full object-cover" />
+        <img src={blog.imageURL} alt={blog.title} className="my-4 rounded-lg w-full object-cover
+        border-1 borderColor
+        " />
         <div className="prose dark:prose-invert">
             <article dangerouslySetInnerHTML={{ __html: contentHtml }}/>
         </div>

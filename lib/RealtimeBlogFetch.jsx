@@ -1,5 +1,5 @@
 import { collection, doc, onSnapshot, orderBy, query, where } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { db } from './firebase';
 
 export function useBlogs(){

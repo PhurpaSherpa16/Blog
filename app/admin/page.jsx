@@ -5,9 +5,10 @@ import { useAuth } from "../components/auth/AuthContext";
 import BlogCard from "../components/blog-card";
 import { useAuthorBlogs, useBlogs } from "@/lib/RealtimeBlogFetch";
 import Link from "next/link";
+import Loading from "../components/admin/Loading";
 
 export default function AdminPage() {
-  const { user, loading, logout, userData} = useAuth();
+  const { user, loading, userData} = useAuth();
   const blog = useAuthorBlogs(user?.uid)
   const router = useRouter();
   
@@ -17,18 +18,10 @@ export default function AdminPage() {
     }
   }, [loading, user]);
   
-  
-  if (loading)
-    return (
-  <div className="flex items-center justify-center min-h-screen">
-        Checking authentication...
-      </div>
-    );
-    
-    if (!user || !userData || !blog)
+    if (!user || !userData || !blog || loading)
       return (
-    <div className="flex items-center justify-center min-h-screen">
-        Redirecting...
+      <div className="absolute -left-[30%] w-[130%] h-screen">
+        <Loading/>
       </div>
     );
 
@@ -46,10 +39,12 @@ export default function AdminPage() {
     
 
   return (
-    <div className="admin-padding-inLine admin-padding-block w-full">
+    <div className="admin-padding-inLine py-8 md:py-16 w-full">
+      <div className="grid gap-8">
         <div className="flex justify-between items-center">
-        <h1>Welcome, <span className="uppercase">{userData.fullName}</span></h1>
+          <h1>Welcome, <br /><span className="uppercase">{userData.fullName}</span></h1>
         </div>
+
         <div className="w-full">
           <span>Recent Posts</span>
           <div className="cardDiv gap-8 w-full">
@@ -62,7 +57,7 @@ export default function AdminPage() {
             }
           </div>
         </div>
-
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 
-export default function userProfile({userData}) {
+export default function userProfile({userData, height=150, width=150}) {
 
   const profileImage = userData.image?`/${userData.image}.png`:'/user.png'
 
@@ -11,9 +11,9 @@ export default function userProfile({userData}) {
         <Image
         className='object-cover'
         src={profileImage}
-        height={150}
+        height={height}
         alt='logo'
-        width={150}
+        width={width}
         />
     </div>
   )

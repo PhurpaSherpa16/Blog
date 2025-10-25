@@ -13,14 +13,14 @@ import AdminPostEditable from '@/app/components/AdminPostEditable'
 
 
 export default async function page({params}) {
-
     const blog = await getBlogById(params.id);
 
     if(!blog.content){
         return <div className='container mx-auto py-8'>Post dont have data</div>
     }
     
-    const {data, content} = matter(blog.content)
+    const {content} = matter(blog.content)
+    
     const processor = unified()
         .use(remarkParse)
         .use(remarkRehype)
@@ -42,7 +42,9 @@ export default async function page({params}) {
 
     return (
         <div className='w-full flex-center'>
-            <AdminPostEditable contentHtml={contentHtml} blog={blog}/>
+            <AdminPostEditable 
+            contentHtml={contentHtml} 
+            blog={blog}/>
         </div>
     )
 }
