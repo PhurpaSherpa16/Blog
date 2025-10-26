@@ -10,9 +10,10 @@
   --menuBackgroundColor: #e5e7eb;
   --redColor : oklch(66.127% 0.22277 24.992);
   --themeHover : oklch(66.127% 0.22277 24.992);
-  --inputBorder : #c4c4c4;
-  --border : rgba(0, 0, 0, 0.166);
+  --inputBorder : #e3e3e3;
+  --border : rgba(128, 128, 128, 0.166);
   --whiteBlack : white;
+  --blue : rgb(0, 0, 137);
 }
 
 .dark {
@@ -27,6 +28,7 @@
   --inputBorder : #626262;
   --border : rgba(255, 255, 255, 0.166);
   --whiteBlack : rgb(0, 0, 0);
+  --blue : rgb(255, 243, 184);
 }
 
 @font-face {

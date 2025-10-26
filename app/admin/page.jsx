@@ -8,7 +8,7 @@ import Link from "next/link";
 import Loading from "../components/admin/Loading";
 
 export default function AdminPage() {
-  const { user, loading, userData} = useAuth();
+  const { user, loading, userData, logout} = useAuth();
   const blog = useAuthorBlogs(user?.uid)
   const router = useRouter();
   
@@ -21,6 +21,7 @@ export default function AdminPage() {
     if (!user || !userData || !blog || loading)
       return (
       <div className="absolute -left-[30%] w-[130%] h-screen">
+       
         <Loading/>
       </div>
     );
@@ -42,7 +43,7 @@ export default function AdminPage() {
     <div className="admin-padding-inLine py-8 md:py-16 w-full">
       <div className="grid gap-8">
         <div className="flex justify-between items-center">
-          <h1>Welcome, <br /><span className="uppercase">{userData.fullName}</span></h1>
+          <h1>Welcome, <br /><span className="uppercase">{userData?.fullName}</span></h1>
         </div>
 
         <div className="w-full">

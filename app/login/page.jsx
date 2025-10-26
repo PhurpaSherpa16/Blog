@@ -1,66 +1,40 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { useAuth } from "../components/auth/AuthContext";
-import { loginWithGoogle } from "@/lib/firebaseAuth";
-import Link from "next/link";
+'use client'
+import manRocket from '@/public/man.json'
+import Lottie from 'lottie-react';
+
+import LoginForm from "../components/LoginForm";
+import UserRegisterForm from '../components/UserRegisterForm';
+import { useState } from 'react';
+
+
+
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter();
-
-  const {user, setUser} = useAuth()
-
-  console.log(user, 'login page')
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      router.push("/admin");
-    } catch (err) {
-      setError("Invalid credentials");
-    }
-  };
-
-  const handleLoginWithGoogle = async () =>{
-    const loggedUser = await loginWithGoogle()
-    if (loggedUser) {setUser(loggedUser)}
-  }
-
-  if(user){
-    router.push("/admin");
-  }
+  const [loginRegister, setLoginRegister] = useState(false)
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-      <h1 className="text-3xl mb-6">Admin Login</h1>
-      <form onSubmit={handleLogin} className="flex flex-col gap-4 w-80">
-        <input
-          type="email"
-          placeholder="Email"
-          className="p-2 rounded bg-gray-800 border border-gray-700"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="p-2 rounded bg-gray-800 border border-gray-700"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p className="text-red-400">{error}</p>}
-        <button className="bg-blue-600 hover:bg-blue-700 py-2 rounded">Login</button>
-      </form>
-      <button onClick={handleLoginWithGoogle} className="btn">
-          Login with Google
-        </button>
-        <Link href={'/register'}>Create Account</Link>
+    <>
+    <div className="relative flex flex-col lg:flex-row py-8 lg:pt-24 2xl:pt-42 justify-center items-center lg:items-start lg:justify-between px-4 md:container mx-auto gap-8">
+      <div className="relative h-fit">
+        <h1>
+          <span className="text-2xl md:text-4xl tracking-wider">Sign in to continue</span><br />
+          <span className="text-[20vw] md:text-[13vw] lg:text-[10vw] uppercase font-black">
+            <span className="relative z-20">your</span> <br/>
+            <span className="relative z-40">journey</span>
+          </span>
+        </h1>
+        <div className="w-fit absolute z-30 bottom-0 2xl:bottom-10 -right-8 md:-right-15 2xl:right-0">
+          <Lottie className='h-60 w-60 md:h-80 md:w-80 lg:h-120 lg:w-120' animationData={manRocket} loop={true} />
+        </div>
+        <span className="text-[var(--textColor)] tracking-tight">***We never share your information</span>
+      </div>
+      {
+        loginRegister ?
+        <LoginForm setLoginRegister={setLoginRegister}/>
+        :
+        <UserRegisterForm setLoginRegister={setLoginRegister}/>
+      }
     </div>
+    </>
   );
 }

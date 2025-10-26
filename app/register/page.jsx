@@ -10,11 +10,6 @@ import { auth, db } from '@/lib/firebase'
 
 export default function page() {
     const {setUser} = useAuth()
-    // const [email, setEmail] = useState('')
-    // const [password, setPassword] = useState('')
-    // const [name, setName] = useState('')
-    // const [profession, setProfession] = useState('')
-    // const [imageUrl, setImageUrl] = useState('')
     const router = useRouter()
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
