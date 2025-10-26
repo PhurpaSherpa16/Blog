@@ -13,7 +13,8 @@ import { FaEyeSlash } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdCloseCircle } from "react-icons/io"
 import { IoLogIn } from "react-icons/io5";
-
+import Loading from '@/public/LoadingElephant.json'
+import Lottie from 'lottie-react';
 
 export default function LoginForm({setLoginRegister}) {
 
@@ -22,6 +23,7 @@ export default function LoginForm({setLoginRegister}) {
   const [error, setError] = useState("");
   const router = useRouter();
   const [passwordShow, setPasswordShow] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const {user, setUser} = useAuth()
 
@@ -29,11 +31,21 @@ export default function LoginForm({setLoginRegister}) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true)
+    setError('')
+    if(email==='' || password ===''){
+        setError('Please confirm all filed are filled.')
+        setLoading(false)
+        return
+    }
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/admin");
     } catch (err) {
-      setError("Invalid credentials");
+        setError("Invalid credentials");
+    }
+    finally{
+        setLoading(false)
     }
   };
 
@@ -52,7 +64,7 @@ export default function LoginForm({setLoginRegister}) {
   }
 
   return (
-    <div className="w-full flex justify-center lg:justify-end relative">
+    <div className="w-full lg:pt-24 2xl:pt-42 flex justify-center lg:justify-end relative">
         <div className="relative overflow-hidden flex flex-col items-center gap-6 justify-center 
         bg-[var(--whiteBlack)] border borderColor px-4 md:px-16 py-8 rounded-lg shadow-lg">
           {error &&
@@ -85,7 +97,7 @@ export default function LoginForm({setLoginRegister}) {
             </div>
             <div className="full flex-center relative h-fit overflow-hidden">
               <input
-              type="password"
+              type={passwordShow ? 'text' : 'password'} 
               placeholder="••••••••"
               className="relative p-2 rounded border borderColor tracking-widest px-10 w-full"
               value={password}
@@ -104,11 +116,19 @@ export default function LoginForm({setLoginRegister}) {
                 }
               </div>
             </div>
-            <button className="bg-blue-600 hover:bg-blue-700 py-2 rounded text-white
-            cursor-pointer flex-center gap-1 hover:shadow transition-all duration-200">
-                Continue
-                <IoLogIn className="h-6 w-6"/>
-            </button>
+            <div className="w-full flex flex-col">
+                {loading ? 
+                <div className="flex-center">
+                    <Lottie className='h-20 w-20 md:h-20 md:w-20 lg:h-20 lg:w-20' animationData={Loading} loop={true} />
+                </div>
+                    :
+                <button className="bg-blue-600 hover:bg-blue-700 py-2 rounded text-white
+                cursor-pointer flex-center gap-1 hover:shadow transition-all duration-200">
+                    Continue
+                    <IoLogIn className="h-6 w-6"/>
+                </button>
+                }
+            </div>
           </form>
           <div className="grid w-full gap-4 items-center justify-center">
             <button onClick={handleLoginWithGoogle} className="flex-center gap-1 cursor-pointer">
