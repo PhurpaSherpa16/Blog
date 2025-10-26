@@ -6,7 +6,7 @@ import { FaSave } from "react-icons/fa";
 export default function AlertModal({setConfirmModal, saveChanges}) {
 
   return (
-    <div className='w-full h-full bg-black/20 backdrop-blur-xl flex items-center justify-center'>
+    <div className='w-full h-full bg-black/20 backdrop-blur-xl flex items-center justify-center px-4'>
       <div className='w-100 bg-[var(--secondaryBackground)] p-8 rounded-lg'>
         <div className='grid gap-4'>
             <div className='grid'>
