@@ -25,7 +25,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="scroll-p-10 scroll-smooth">
       <body>
         <AuthProvider>
           <ThemeProvider
@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange>
               <Navbarwrapper/>
-            <div>
+            <div className="relative">
               {children}
             </div>
           </ThemeProvider>

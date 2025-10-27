@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -15,6 +15,8 @@ import { IoMdCloseCircle } from "react-icons/io"
 import { IoLogIn } from "react-icons/io5";
 import Loading from '@/public/LoadingElephant.json'
 import Lottie from 'lottie-react';
+import { useUserData } from "@/lib/UserFetch";
+
 
 export default function LoginForm({setLoginRegister}) {
 
@@ -25,9 +27,8 @@ export default function LoginForm({setLoginRegister}) {
   const [passwordShow, setPasswordShow] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const {user, setUser} = useAuth()
+  const {user, setUser, userData} = useAuth()
 
-  console.log(user, 'login page')
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -50,14 +51,23 @@ export default function LoginForm({setLoginRegister}) {
   };
 
   const handleLoginWithGoogle = async () =>{
-    const loggedUser = await loginWithGoogle()
-    if (loggedUser) {setUser(loggedUser)}
-
+    try {
+      const loggedUser = await loginWithGoogle();
+      if (loggedUser) {
+        setUser(loggedUser);
+      }
+    } catch (error) {
+      setError("Google login failed");
+    }
   }
 
-  if(user){
-    router.push("/admin");
-  }
+
+  useEffect(() => {
+      if (user) {
+        router.push("/admin");
+      }
+  }, [user]);
+  
 
   const handlePasswordShow = () =>{
     setPasswordShow((p)=>!p)

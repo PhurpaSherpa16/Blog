@@ -6,37 +6,39 @@ import BlogCard from "../components/blog-card";
 import { useAuthorBlogs, useBlogs } from "@/lib/RealtimeBlogFetch";
 import Link from "next/link";
 import Loading from "../components/admin/Loading";
+import CompleteProfile from "../components/admin/CompleteProfile";
 
 export default function AdminPage() {
-  const { user, loading, userData, logout} = useAuth();
+  const { user, loading, userData} = useAuth();
   const blog = useAuthorBlogs(user?.uid)
   const router = useRouter();
   
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
+      if (!loading && !user) {
+        router.push("/login");
+      }
   }, [loading, user]);
   
-    if (!user || !userData || !blog || loading)
-      return (
-      <div className="absolute -left-[30%] w-[130%] h-screen">
-       
-        <Loading/>
-      </div>
-    );
+  if (!user || !blog || loading)
+    return (
+    <div className="absolute -left-[30%] w-[130%] h-screen">
+      <Loading/>
+    </div>
+  );
+
+  if(!userData) return <CompleteProfile/>
 
 
-    if (blog.length<1){
-      return (
-        <div className="flex items-center justify-center min-h-screen gap-1">
-        <span>No, post please</span>
-        <span className="text-blue-500 font-bold">
-           <Link href={'/admin/posts'}>Add Some Post</Link>
-        </span>
-      </div>
-      )
-    }
+  if (blog.length<1){
+    return (
+      <div className="flex items-center justify-center min-h-screen gap-1">
+      <span>No, post please</span>
+      <span className="text-blue-500 font-bold">
+          <Link href={'/admin/posts'}>Add Some Post</Link>
+      </span>
+    </div>
+    )
+  }
     
 
   return (

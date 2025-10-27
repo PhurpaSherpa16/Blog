@@ -1,19 +1,22 @@
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth"
-import { auth, googleProvider } from "./firebase"
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { auth } from "./firebase"
+
+const provider = new GoogleAuthProvider();
 
 export const loginWithGoogle = async () =>{
     try{
-        const result = await signInWithPopup(auth, googleProvider)
+        const result = await signInWithPopup(auth, provider)
         // this gives google access token
-        const credential = googleProvider.credentialFromResult(result)
-        const token = credential.accessToken
+        const credential = GoogleAuthProvider.credentialFromResult(result)
+        const token = credential?.accessToken
         const user = result.user // user Info
         return {user, token}
 
     }
     catch(error){
-        console.error("Google login failed:", error);
-        return null
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log("Google login error", error);
+        throw error;
     }
 }
 

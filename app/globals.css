@@ -190,6 +190,11 @@ code[data-line-numbers-max-digits="4"] > [data-line]::before {
     bg-[var(--menuBackgroundColor)]
   }
 
+  .transition-Smooth{
+    @apply
+    transition-all duration-300
+  }
+
 }
 
 code[data-line-numbers] {

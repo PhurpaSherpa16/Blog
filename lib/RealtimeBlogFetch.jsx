@@ -19,6 +19,29 @@ export function useBlogs(){
     return blog
 }
 
+export function useBlogsLite(){
+    const [blogs, setBlogs] = useState([])
+
+    useEffect(()=>{
+        const result = query(collection (db, 'blogs'), orderBy("createdAt","desc"))
+        const unsub = onSnapshot(result, (snapshot) => {
+        const list = snapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+            id: doc.id,
+            title: data.title,
+            imageURL: data.imageURL,
+            author : data.author
+            };
+        });
+
+        setBlogs(list);
+        })
+        return ()=>unsub()
+    },[])
+    return blogs;
+}
+
 
 export function useAuthorBlogs(uid){
     const [blog, setBlogs] = useState([])

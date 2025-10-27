@@ -13,7 +13,9 @@ import { PiOfficeChairFill } from "react-icons/pi";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import { FaQuestionCircle } from "react-icons/fa";
-
+import LoadingElephant from '@/public/LoadingElephant.json'
+import Lottie from 'lottie-react';
+import successAnimation from '@/public/success.json'
 import gsap from "gsap";
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '@/lib/firebase'
@@ -25,12 +27,13 @@ export default function UserRegisterForm({setLoginRegister}) {
     const {setUser} = useAuth()
     const router = useRouter()
     const [error, setError] = useState(null)
-    const [loading, setLoading] = useState(false)
     const [passwordShow, setPasswordShow] = useState(false)
     const [passwordStrength, setPasswordStrength] = useState(0)
     const [passwordStrengthColor, setPasswordStrengthColor] = useState('')
     const [passwordStrengthStatus, setPasswordStrengthStatus] = useState('')
     const passwordStrengthRef = useRef()
+    const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(false)
 
     const helper = useRef()
 
@@ -59,7 +62,7 @@ export default function UserRegisterForm({setLoginRegister}) {
     const [formData, setFormData] = useState({
         fullName: '',
         profession: '',
-        imageUrl: 'user',
+        image: 'user',
         email: '',
         password: ''
     })
@@ -67,7 +70,6 @@ export default function UserRegisterForm({setLoginRegister}) {
     const handleLoginWithGoogle = async () =>{
         const loggedUser = await loginWithGoogle()
         if (loggedUser) {setUser(loggedUser)}
-
         }
 
     const registerSetUserHandleChange = (e) =>{
@@ -81,15 +83,80 @@ export default function UserRegisterForm({setLoginRegister}) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
     }
 
-    const handlePassword =(e)=>{
+    // const handlePassword =(e)=>{
+    //     setLoading(true)
+    //     const chars = e.target.value.split('')
+    //     let number = 
+    //         (chars.length >= 2 ? 20 : 0) +
+    //         (chars.length >= 4 ? 20 : 0) +
+    //         (chars.length >= 6 ? 30 : 0) +
+    //         (/[0-9]/.test(chars) ? 5 : 0) +
+    //         (/[A-Z]/.test(chars) ? 5 : 0) +
+    //         (/[\W_]/.test(chars) ? 20 : 0);
+
+    //     if (number >=20) {
+    //         setPasswordStrengthColor('#ff1100')
+    //         setPasswordStrengthStatus('Very weak')
+    //     }
+    //     if (number >=40) {
+    //         setPasswordStrengthColor('#ff4d00')
+    //         setPasswordStrengthStatus('Weak')
+    //     }
+    //     if (number >= 70) {
+    //         setPasswordStrengthColor('orange')
+    //         setPasswordStrengthStatus('Strong')
+    //     }
+    //     if (number >= 80) {
+    //         setPasswordStrengthColor('#0a1e63')
+    //         setPasswordStrengthStatus('Very Strong')
+    //     }
+    //     if (number >= 90) {
+    //         setPasswordStrengthColor('#0a1e63')
+    //         setPasswordStrengthStatus('Nice')
+    //     }
+    //     if (number === 100) {
+    //         setPasswordStrengthColor('#006311')
+    //         setPasswordStrengthStatus('OK! Stop. Enough!')
+    //     }
+    //     console.log(number)
+    //     setPasswordStrength(number)
+    //     setLoading(false)
+    // }
+        const handlePassword =(e)=>{
         setLoading(true)
-        const chars = e.target.value.split('')
-        let number = (chars.length >= 2 ? 20 : 0) +
-            (chars.length >= 4 ? 20 : 0) +
-            (chars.length >= 6 ? 30 : 0) +
-            (/[0-9]/.test(chars) ? 5 : 0) +
-            (/[A-Z]/.test(chars) ? 5 : 0) +
-            (/[\W_]/.test(chars) ? 20 : 0);
+        let number = 0
+        const tempPassword = e.target.value.split('')
+        const hasCaptialLetter = tempPassword.some(ch => /[A-Z]/.test(ch))
+        const hasSpecialCharacter =  tempPassword.some(ch => /[\W_]/.test(ch))
+        const hasOverSix = tempPassword.length >= 6
+        const hasOverFour = tempPassword.length >= 4
+        const hasOverTwo = tempPassword.length >= 2
+        const hasNum = tempPassword.some(ch => /\d/.test(ch))
+        if(tempPassword.length === 0){
+            setPasswordStrengthColor('')
+            setPasswordStrengthStatus('')
+            setPasswordStrength(0)
+        }
+        if(hasOverTwo) {
+            number += 20
+        }
+        if(hasOverFour) {
+            number += 20
+        }
+        if(hasOverSix) {
+            number += 30
+        }
+        if (hasNum) {
+            number += 5
+        }
+        if (hasCaptialLetter) {
+            number += 5
+            
+        }
+        if (hasSpecialCharacter) {
+            number += 20
+
+        }
 
         if (number >=20) {
             setPasswordStrengthColor('#ff1100')
@@ -105,7 +172,7 @@ export default function UserRegisterForm({setLoginRegister}) {
         }
         if (number >= 80) {
             setPasswordStrengthColor('#0a1e63')
-            setPasswordStrengthStatus('Very Strong')
+            setPasswordStrengthStatus('Strong')
         }
         if (number >= 90) {
             setPasswordStrengthColor('#0a1e63')
@@ -113,7 +180,7 @@ export default function UserRegisterForm({setLoginRegister}) {
         }
         if (number === 100) {
             setPasswordStrengthColor('#006311')
-            setPasswordStrengthStatus('OK! Stop. Enough!')
+            setPasswordStrengthStatus('Very Strong!')
         }
 
         setPasswordStrength(number)
@@ -142,39 +209,41 @@ export default function UserRegisterForm({setLoginRegister}) {
             setLoading(false)
             return
         }
-
         if (!isValidEmail(formData.email)) {
             setLoading(false)
             return
         }
-
         if(!isValidPassword(formData.password)){
             setLoading(false)
             return
         }
-
         try{
-            const result = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
-            const user = result.user
-            console.log(user)
-            await setDoc(doc(db, 'users',user.uid),{
-                fullName: formData.fullName,
-                email: formData.email,
-                profession: formData.profession,
-                image: 'user',
-                password: formData.password,
-                createdAt: new Date()
-            })
-            setUser(user)
-            console.log('success register')
-            alert('User Register Success')
-            router.push('/admin')
+            setTimeout(() =>{
+                setSuccess(true)
+                setTimeout(()=>{
+                    setTimeout( async ()=>{
+                        const result = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+                        const user = result.user
+                        console.log(user)
+                        await setDoc(doc(db, 'users',user.uid),{
+                            fullName: formData.fullName,
+                            email: formData.email,
+                            profession: formData.profession,
+                            image: 'user',
+                            password: formData.password,
+                            createdAt: new Date()
+                        })
+                        setUser(user)
+                        router.push('/admin')
+                        setSuccess(false)
+                        setLoading(false)
+                    },10)
+                },1000)
+            },2000)
         }
         catch(error){
             console.log("Register is not success.", error)
             setError('Register is not success.')
-        }
-        finally{
             setLoading(false)
         }
     }
@@ -279,13 +348,25 @@ export default function UserRegisterForm({setLoginRegister}) {
                     </div>
                 </div>
 
+                <div className="w-full flex flex-col relative">
+                    {loading ? 
+                    <div className="flex-center w-full flex-col">
+                        {success ? 
+                        <Lottie className='h-16 w-16' animationData={successAnimation} loop={false} />
+                        :
+                        <Lottie className='h-20 w-20' animationData={LoadingElephant} loop={true} />
+                        }
+                    </div>
+                      :
+                     <button type='button' className="reltive z-10 bg-blue-600 hover:bg-blue-700 py-2 rounded text-white cursor-pointer
+                        flex-center gap-1 hover:shadow transition-all duration-200"
+                        onClick={registerUser}>
+                            Create Account
+                            <MdUpload className="h-6 w-6"/>
+                    </button>
+                  }
+                </div>
 
-                <button type='button' className="reltive z-10 bg-blue-600 hover:bg-blue-700 py-2 rounded text-white cursor-pointer
-                flex-center gap-1 hover:shadow transition-all duration-200"
-                onClick={registerUser}>
-                    Create Account
-                    <MdUpload className="h-6 w-6"/>
-                </button>
             </form>
                 <button onClick={handleLoginWithGoogle} className="flex-center gap-1 cursor-pointer">
                     or, Register with <FcGoogle className="h-6 w-6"/>

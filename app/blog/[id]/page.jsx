@@ -1,5 +1,8 @@
 import React from 'react'
-import fs from 'fs'
+import { getBlogById } from '@/lib/blogFetch';
+import BlogNextPrev from '@/app/components/BlogNextPrev';
+import RedableDate from '@/app/components/redableDate';
+import Onthispage from '@/app/components/OnThisPage';
 import matter from 'gray-matter'
 import rehypeDocument from 'rehype-document'
 import rehypeFormat from 'rehype-format'
@@ -9,20 +12,28 @@ import remarkRehype from 'remark-rehype'
 import {unified} from 'unified'
 import rehypePrettyCode from "rehype-pretty-code";
 import { transformerCopyButton } from '@rehype-pretty/transformers'
-import { getBlogById } from '@/lib/blogFetch';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSlug from 'rehype-slug'
+import { MdKeyboardBackspace } from 'react-icons/md';
+import Link from 'next/link';
+
+
 export default async function page({params}) {
 
     const blog = await getBlogById(params.id);
+
     if(!blog.content){
         return <div className='container mx-auto py-8'>Post dont have data</div>
     }
-    
-    const {data, content} = matter(blog.content)
+
+    const {content} = matter(blog.content)
     const processor = await unified()
         .use(remarkParse)
         .use(remarkRehype)
         .use(rehypeDocument, {title: 'My Blog'})
         .use(rehypeFormat)
+        .use(rehypeSlug)
+        .use(rehypeAutolinkHeadings)
         .use(rehypePrettyCode, {
         theme:'github-dark',
         lineNumbers: true,
@@ -34,19 +45,34 @@ export default async function page({params}) {
         ],
         })
         .use(rehypeStringify)
+    const contentHtml = (await processor.process(content)).toString()
 
-        const contentHtml = (await processor.process(content)).toString()
 
     return (
-        <div className="padding-inLine py-8">
-        <h1 className="text-3xl font-bold">{blog.title}</h1>
-        <p className="text-gray-500">{blog.date} | {blog.author}</p>
-        <img src={blog.imageURL} alt={blog.title} className="my-4 rounded-lg w-full object-cover
-        border-1 borderColor
-        " />
-        <div className="prose dark:prose-invert">
-            <article dangerouslySetInnerHTML={{ __html: contentHtml }}/>
+        <div className='relative h-full'>
+        <div className='padding-inLine py-8 relative flex gap-8'>
+            <div className="relative md:w-7/10 md:border-r borderColor md:pr-8 overflow-hidden">
+                <div className='flex items-center gap-4'>
+                    <div className='h-10 w-10 flex-center'>
+                        <Link href={'/'} title='Go Back' className='h-fit w-fit hover:text-[var(--textColor)] cursor-pointer transition-Smooth'>
+                            <MdKeyboardBackspace className='h-8 w-8 '/>
+                        </Link>
+                    </div>
+                    <h1 className="text-3xl font-bold">{blog.title}</h1>
+                </div>
+                <p className="text-gray-500"><RedableDate date={blog.createdAt}/> || {blog.author}</p>
+                <img src={blog.imageURL} alt={blog.title} className="my-4 rounded-lg w-full h-fit  lg:h-120 lg:w-220 2xl:w-full object-cover
+                border-1 borderColor
+                " />
+                <div className="prose dark:prose-invert overflow-scroll">
+                    <article dangerouslySetInnerHTML={{ __html: contentHtml }}/>
+                </div>
+            </div>
+            <div className='hidden md:block w-3/10 sticky top-0 h-screen  right-0'>
+                <Onthispage htmlContent={contentHtml} userId={blog.userId}/>
+            </div>
         </div>
+        <BlogNextPrev blogid={blog.id}/>
         </div>
     )
 }

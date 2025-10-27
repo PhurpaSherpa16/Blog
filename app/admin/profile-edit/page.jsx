@@ -9,16 +9,12 @@ import { AlertContext } from '@/app/components/admin/AlertContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Loading from '@/app/components/admin/Loading';
-import { usePathname } from 'next/navigation';
-
+import CompleteProfile from '@/app/components/admin/CompleteProfile';
 
 
 export default function page() {
   const {userData, user} = useAuth()
 
-  const pathname = usePathname()
-
-  
   if (!user || !userData)
     return (
   <div className="absolute w-full flex-center md:-left-[30%] md:w-[130%] h-screen">
