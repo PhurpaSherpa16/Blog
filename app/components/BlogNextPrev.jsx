@@ -64,7 +64,7 @@ export default function BlogNextPrev({blogid}) {
                         </span>
                     </div>
                     <div>
-                        <img src={ nextPost.imageURL? prevPost.imageURL : '/image.png'} alt="image" className='h-20 w-40 object-cover rounded'/>
+                        <img src={ nextPost.imageURL? nextPost.imageURL : '/image.png'} alt="image" className='h-20 w-40 object-cover rounded'/>
                     </div>
                 </div>
                 <GrFormNextLink className='h-8 w-8'/>
