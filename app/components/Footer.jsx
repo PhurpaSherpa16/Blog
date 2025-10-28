@@ -41,7 +41,10 @@ export default function Footer() {
     <div className='padding-inLine px-4 lg:px-0 relative w-full'>
         <div className='gap-4 flex flex-col md:flex-row justify-between items-center pb-8 w-full'>
             <div className='grid w-full lg:w-fit gap-2'>
-                <h2 className='font-bold'>Subscribe to the newsletters to stay in <br className='hidden md:block'/> touch with the latest.</h2>
+                <h2 className='font-bold'>
+                    Reach out and stay connected <br className='hidden md:block'/> — I’ll keep you updated 
+                    with the latest fixes and tutorials.
+                </h2>
                 <div className='relative flex flex-col md:flex-row items-center md:w-fit gap-4'>
                     <div className='absolute -top-20 w-full'>
                         <ErrorAlert error={error} setError={setError}/>
