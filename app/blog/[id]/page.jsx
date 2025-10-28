@@ -68,7 +68,7 @@ export default async function page({params}) {
                     <article dangerouslySetInnerHTML={{ __html: contentHtml }}/>
                 </div>
             </div>
-            <div className='hidden md:block w-3/10 sticky top-0 h-screen  right-0'>
+            <div className='hidden md:block w-3/10 sticky top-0 h-fit  right-0'>
                 <Onthispage htmlContent={contentHtml} userId={blog.userId}/>
             </div>
         </div>

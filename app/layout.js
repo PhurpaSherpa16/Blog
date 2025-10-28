@@ -3,6 +3,7 @@ import "./globals.css";
 import ThemeProvider from "./components/theme/theme-provider";
 import { AuthProvider } from "./components/auth/AuthContext";
 import Navbarwrapper from "./components/navbar-wrapper";
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +34,14 @@ export default function RootLayout({ children }) {
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange>
-              <Navbarwrapper/>
-            <div className="relative">
-              {children}
+            <div className="flex flex-col">
+              <div className="pb-16">
+                  <Navbarwrapper/>
+                  <div className="relative">
+                    {children}
+                  </div>
+              </div>
+              <Footer/>
             </div>
           </ThemeProvider>
         </AuthProvider>

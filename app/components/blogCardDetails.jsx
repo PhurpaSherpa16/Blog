@@ -46,16 +46,15 @@ export default function BlogCard({blog}) {
         {name: "js", src: '/js.svg'},
         {name: "gsap", src: '/gsap.svg'},
     ]
-    
 
     return (
         <div ref={cardRef} className='relative w-full overflow-hidden grid card shadow
         h-fit border-1 borderColor
         bg-gray-400/5 rounded-lg hover:shadow-lg transition-shadow duration-300'>
-            <div className='cardImage w-full h-30 overflow-hidden relative'>
+            <div className='cardImage w-full overflow-hidden relative'>
                 <img src={blog.imageURL} 
                 alt="react image"
-                className='h-40 w-full object-cover relative'
+                className='h-60 w-full object-cover relative'
                 />
 
                 {
@@ -71,14 +70,24 @@ export default function BlogCard({blog}) {
                     </Link>
                 }
             </div>
-            <div className='flex flex-col gap-2 h-50 w-full px-4 py-4 bg-[var(--whiteBlack)]'>
+            <div className='flex flex-col gap-2 h-full w-full px-4 py-4 bg-gray-400/10'>
                 <div className='flex-center w-fit gap-2'>
                     <CgCalendarDates className='h-4 w-4'/>
                     <span><RedableDate date={blog.createdAt} /></span>
-                    <span className='bg-[var(--textColor)] w-1 h-1 rounded-full'></span>
+                    <span className='bg-black/60 w-1 h-1 rounded-full'></span>
                     <span>{readTime} min read</span>
                 </div>
-                <div className=''>
+                <div className='flex items-center w-full gap-4 '>
+                    <span className='italic font-medium'>{blog.author || 'Phurpa Sherpa'}</span>
+                    {/* <div className='flex-center gap-2'>
+                        {tech.map((icon, index)=>(
+                        <div className='p-2 bg-black/60 rounded-full' key={index}>
+                            <img className='h-6 w-6' src={icon.src} alt={icon.name}/>
+                        </div>
+                        ))}
+                    </div> */}
+                </div>
+                <div>
                     <div className='w-fit'>
                         {
                             location === '/admin' ?
@@ -87,12 +96,12 @@ export default function BlogCard({blog}) {
                                 </Link>
                             :
                             <Link  href={`/blog/${blog.id}`} className='cursor-pointer font-medium'>
-                                {blog.title.split(" ").length <= 5 ? blog.title : blog.title.split(" ").slice(0,6).join(" ")}
+                                {blog.title.split(" ").length <= 5 ? blog.title : blog.title.split(" ").slice(0,6).join(" ") + " ..."}
                             </Link>
                         }
                         <div ref={hrRef} className='w-full h-1 border-t-2'/>
                     </div>
-                    <p className='text-justify'>{blog.description.split(" ").slice(0,20).join(" ") + " ..."}</p>
+                    {/* <p className='text-justify'>{blog.description.split(" ").slice(0,15).join(" ") + " ..."}</p> */}
                 </div>
             </div>
         </div>

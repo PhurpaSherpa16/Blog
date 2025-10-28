@@ -17,9 +17,9 @@ export default function Onthispage({htmlContent, userId}) {
         const tempDiv = document.createElement('div')
         tempDiv.innerHTML = htmlContent
         const h2Elements = tempDiv.querySelectorAll('h2')
-        const h2Texts = Array.from(h2Elements).map(h2 => ({
-            text: h2.textContent || '',
-            id: h2.id || ''
+        const h2Texts = Array.from(h2Elements).map(span => ({
+            text: span.textContent || '',
+            id: span.id || ''
         }))
         setHeadings(h2Texts)
     },[htmlContent])
@@ -33,7 +33,7 @@ export default function Onthispage({htmlContent, userId}) {
         <div className='on-this-page flex flex-col h-fit gap-4'>
             <span className='text-2xl font-bold'>Table of Content</span>
             <div>
-                <ol type='1' className='list-decimal pl-5 flex flex-col gap-2 text-lg font-medium'>
+                <ol type='1' className='list-decimal pl-5 flex flex-col gap-2 text-sm'>
                     {headings.map((heading, index) => (
                         <li className='hover:underline cursor-pointer' key={index}>
                             <a href={`#${heading.id}`}>{heading.text}</a>
