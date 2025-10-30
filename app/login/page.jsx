@@ -1,21 +1,17 @@
 'use client'
 import manRocket from '@/public/man.json'
 import Lottie from 'lottie-react';
-
 import LoginForm from "../components/LoginForm";
 import UserRegisterForm from '../components/UserRegisterForm';
 import { useState } from 'react';
 
-
-
-
 export default function LoginPage() {
   const [loginRegister, setLoginRegister] = useState(true)
   
-
   return (
     <>
-    <div className="relative flex flex-col lg:flex-row py-8  justify-center items-center lg:items-start lg:justify-between px-4 md:container mx-auto gap-8">
+    <div className="relative flex flex-col lg:flex-row py-8  justify-center items-center lg:items-start 
+    lg:justify-between px-4 md:container mx-auto gap-8">
       <div className="relative h-fit lg:pt-24 2xl:pt-42">
         <h1>
           <span className="text-2xl md:text-4xl tracking-wider">Sign in to continue</span><br />

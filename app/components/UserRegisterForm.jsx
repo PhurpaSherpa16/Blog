@@ -21,8 +21,6 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '@/lib/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 
-
-
 export default function UserRegisterForm({setLoginRegister}) {
     const {setUser} = useAuth()
     const router = useRouter()
@@ -83,45 +81,6 @@ export default function UserRegisterForm({setLoginRegister}) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
     }
 
-    // const handlePassword =(e)=>{
-    //     setLoading(true)
-    //     const chars = e.target.value.split('')
-    //     let number = 
-    //         (chars.length >= 2 ? 20 : 0) +
-    //         (chars.length >= 4 ? 20 : 0) +
-    //         (chars.length >= 6 ? 30 : 0) +
-    //         (/[0-9]/.test(chars) ? 5 : 0) +
-    //         (/[A-Z]/.test(chars) ? 5 : 0) +
-    //         (/[\W_]/.test(chars) ? 20 : 0);
-
-    //     if (number >=20) {
-    //         setPasswordStrengthColor('#ff1100')
-    //         setPasswordStrengthStatus('Very weak')
-    //     }
-    //     if (number >=40) {
-    //         setPasswordStrengthColor('#ff4d00')
-    //         setPasswordStrengthStatus('Weak')
-    //     }
-    //     if (number >= 70) {
-    //         setPasswordStrengthColor('orange')
-    //         setPasswordStrengthStatus('Strong')
-    //     }
-    //     if (number >= 80) {
-    //         setPasswordStrengthColor('#0a1e63')
-    //         setPasswordStrengthStatus('Very Strong')
-    //     }
-    //     if (number >= 90) {
-    //         setPasswordStrengthColor('#0a1e63')
-    //         setPasswordStrengthStatus('Nice')
-    //     }
-    //     if (number === 100) {
-    //         setPasswordStrengthColor('#006311')
-    //         setPasswordStrengthStatus('OK! Stop. Enough!')
-    //     }
-    //     console.log(number)
-    //     setPasswordStrength(number)
-    //     setLoading(false)
-    // }
         const handlePassword =(e)=>{
         setLoading(true)
         let number = 0

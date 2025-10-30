@@ -15,8 +15,6 @@ import { IoMdCloseCircle } from "react-icons/io"
 import { IoLogIn } from "react-icons/io5";
 import Loading from '@/public/LoadingElephant.json'
 import Lottie from 'lottie-react';
-import { useUserData } from "@/lib/UserFetch";
-
 
 export default function LoginForm({setLoginRegister}) {
 
@@ -27,7 +25,7 @@ export default function LoginForm({setLoginRegister}) {
   const [passwordShow, setPasswordShow] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const {user, setUser, userData} = useAuth()
+  const {user, setUser} = useAuth()
 
 
   const handleLogin = async (e) => {
